@@ -35,6 +35,14 @@ Así entonces, un usuario puede entrar por su propio mérito, o a causa de algú
 
 ## Setup
 
+### Variables de entorno
+
+Se necesitan dos archivos de variables de entorno en la base del proyecto antes de levantar este. Los archivos `.env` y `.env_db`
+
+En `./docs/example_environment.env` se encuentran ejemplos de estos archivos.
+
+### Docker
+
 Debe levantar la app con docker-compose
 
 ```
@@ -50,12 +58,6 @@ docker-compose exec api npx sequelize db:migrate
 Su app está lista para funcionar
 
 ## Modo de uso 
-
-## Variables de entorno
-
-Se necesitan dos archivos de variables de entorno en la base del proyecto antes de levantar este. Los archivos `.env` y `.env_db`
-
-En `./docs/example_environment.env` se encuentran ejemplos de estos archivos.
 
 ### Token
 
@@ -106,7 +108,7 @@ Posteriormente puede invitar mas miembros añadiendolos mediante una regla en la
 
 ```json=
 {
-  "entity_UUID":"",
+  "userUUID":"",
   "permissions":"r",
   "level":100
 }

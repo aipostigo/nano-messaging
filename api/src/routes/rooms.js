@@ -196,7 +196,7 @@ router.route({
       id: Joi.number(),
     },
     body: {
-      entity_UUID: Joi.string().guid(),
+      userUUID: Joi.string().guid(),
       permissions: Joi.string().max(5),
       level: Joi.number(),
     },
@@ -213,7 +213,7 @@ router.route({
     if (nrules <= 10) {
       const rule = {
         room_id: ctx.request.room.id,
-        entity_UUID: ctx.request.body.entity_UUID,
+        entity_UUID: ctx.request.body.userUUID,
         level: ctx.request.body.level,
         permissions: ctx.request.body.permissions,
       };
