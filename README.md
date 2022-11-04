@@ -145,7 +145,7 @@ Al seleccionar un room correcto, recibirá todos los mensajes dirigidos a ese ro
 ```json=
 {
     "type":"message",
-    "msg":"Fueled up and ready to go"
+    "content":"Fueled up and ready to go"
 }
 ```
 
