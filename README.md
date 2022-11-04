@@ -35,6 +35,14 @@ Así entonces, un usuario puede entrar por su propio mérito, o a causa de algú
 
 ## Setup
 
+### Variables de entorno
+
+Se necesitan dos archivos de variables de entorno en la base del proyecto antes de levantar este. Los archivos `.env` y `.env_db`
+
+En `./docs/example_environment.env` se encuentran ejemplos de estos archivos.
+
+### Docker
+
 Debe levantar la app con docker-compose
 
 ```
@@ -59,13 +67,13 @@ Este token tiene la siguiente composición
 
 ```json=
 {
-    "aud":"chat.nano-messaging.net",
-    "iss":"api.nano-messaging.net",
-    "exp":"999999999999",
-    "sub":"xxxxxx-xxxxx...."
-    "entityUUID":"xxxxxx-xxxxx....",
-    "userUUID":"xxxxxx-xxxxx....",
-    "levelOnEntity":"100"
+  "aud":"chat.nano-messaging.net",
+  "iss":"api.nano-messaging.net",
+  "exp":"9999999999999",
+  "sub":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+  "entityUUID":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "userUUID":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "levelOnEntity":"100"
 }
 ```
 
@@ -76,6 +84,8 @@ Este token tiene la siguiente composición
 
 Este token debe estar firmado con un secreto conjunto con el servicio original que provee los usuarios de este chat. El servicio de chat asumirá que la información contenida en el token es veraz. Adicionalmente, el servicio de chat no requiere interactuar con el servicio original, solo la info contenida en el token
 
+En la carpeta ./scripts se encuentra el archivo `createJWT.js` que contiene un ejemplo para crear un token válido. Para su uso de necesita usar el mismo `.env` que existe en la base del proyecto, o, específicamente usar el mismo secreto, audience e issuer de jwt.
+
 ### Rooms
 
 Debe crearse un room para que los usuarios puedan hablar. Esto se hace con un POST
@@ -84,9 +94,9 @@ Debe crearse un room para que los usuarios puedan hablar. Esto se hace con un PO
 
 ```json=
 {
-    "name":"xxxxxxxxxxxx",
-    "level_admin":"9999",
-    "type":"group"
+  "name":"xxxxxxxxxxxx",
+  "level_admin":"999",
+  "type":"group"
 }
 ```
 
@@ -98,9 +108,9 @@ Posteriormente puede invitar mas miembros añadiendolos mediante una regla en la
 
 ```json=
 {
-    "entity_UUID":"",
-    "permissions":false,
-    "level":999999
+  "userUUID":"",
+  "permissions":"rw",
+  "level":100
 }
 ```
 
@@ -124,8 +134,8 @@ Para comenzar, debe enviar un mensaje con el token especificado anteriormente
 
 ```json=
 {
-    "type":"token",
-    "content":"token.jwt.secreto"
+  "type":"token",
+  "content":"token.jwt.secreto"
 }
 ```
 
@@ -135,8 +145,8 @@ Posteriormente, debe seleccionar un room activo
 
 ```json=
 {
-    "type":"select_room",
-    "room_id":99999
+  "type":"select_room",
+  "room_id":99999
 }
 ```
 
@@ -144,13 +154,23 @@ Al seleccionar un room correcto, recibirá todos los mensajes dirigidos a ese ro
 
 ```json=
 {
-    "type":"message",
-    "msg":"Fueled up and ready to go"
+  "type":"message",
+  "content":"Fueled up and ready to go"
 }
 ```
 
 Recibirá el echo de sus propios mensajes.
 Cada mensaje llegará
+
+### Historial de mensajes
+
+Para ver el historial de mensajes entre dos fechas se necesita el id del room a buscar, el token de un usuario con permisos de lectura("r")
+
+`GET /rooms/:id/messages`
+
+`GET /rooms/:id/messages?dateFrom=YYYY-MM-DD&dateTo=YYYY-MM-DD`
+
+Donde tanto `dateFrom` como `dateTo` son opcionales. En caso de no ingresar alguno, o ninguno, su valor default será el día actual.
 
 ### Estructura
 
