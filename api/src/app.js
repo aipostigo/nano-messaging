@@ -7,6 +7,7 @@ const koajwt = require('koa-jwt');
 const override = require('koa-override-method');
 const helmet = require('koa-helmet');
 const http = require('http');
+const qs = require('qs');
 // const casbin = require('casbin')
 // const authz = require('koa-authz');
 
@@ -92,6 +93,13 @@ app.use(koaBody({
     multiples: true,
   },
 }));
+
+
+app.use((ctx, next) => {
+  ctx.request.query = qs.parse(ctx.request.querystring);
+  ctx.query = qs.parse(ctx.request.querystring);
+  return next();
+});
 
 
 app.use((ctx, next) => {
