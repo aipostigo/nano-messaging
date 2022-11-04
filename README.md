@@ -68,9 +68,9 @@ Este token tiene la siguiente composición
     "aud":"chat.nano-messaging.net",
     "iss":"api.nano-messaging.net",
     "exp":"9999999999999",
-    "sub":"xxxxxx-xxxxx...."
-    "entityUUID":"xxxxxx-xxxxx....",
-    "userUUID":"xxxxxx-xxxxx....",
+    "sub":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+    "entityUUID":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+    "userUUID":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
     "levelOnEntity":"100"
 }
 ```
@@ -92,9 +92,9 @@ Debe crearse un room para que los usuarios puedan hablar. Esto se hace con un PO
 
 ```json=
 {
-    "name":"xxxxxxxxxxxx",
-    "level_admin":"999",
-    "type":"group"
+  "name":"xxxxxxxxxxxx",
+  "level_admin":"999",
+  "type":"group"
 }
 ```
 
@@ -106,9 +106,9 @@ Posteriormente puede invitar mas miembros añadiendolos mediante una regla en la
 
 ```json=
 {
-    "entity_UUID":"",
-    "permissions":false,
-    "level":999999
+  "entity_UUID":"",
+  "permissions":"r",
+  "level":100
 }
 ```
 
