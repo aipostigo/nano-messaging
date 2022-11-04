@@ -109,7 +109,7 @@ Posteriormente puede invitar mas miembros añadiendolos mediante una regla en la
 ```json=
 {
   "userUUID":"",
-  "permissions":"r",
+  "permissions":"rw",
   "level":100
 }
 ```

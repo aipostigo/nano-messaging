@@ -171,7 +171,7 @@ async function authorizeMessageToRoom(ctx, message, actualUser) {
   });
   if (roomPermissions) {
     roomPermissions.forEach((element) => {
-      if (!authorized && element.permissions.indexOf('w') > -1 && element.level >= actualUser.levelOnEntity) {
+      if (!authorized && element.permissions.indexOf('w') > -1) {
         authorized = true;
       }
     });
