@@ -93,7 +93,7 @@ Debe crearse un room para que los usuarios puedan hablar. Esto se hace con un PO
 ```json=
 {
     "name":"xxxxxxxxxxxx",
-    "level_admin":"9999",
+    "level_admin":"999",
     "type":"group"
 }
 ```
