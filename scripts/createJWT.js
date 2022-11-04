@@ -1,6 +1,16 @@
-const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
 dotenv.config();
+
+// Input token on script
+if (!process.argv[2]) {
+  console.log('No UUID provided');
+  console.log('node createJWT.js <UUID>');
+  process.exit(1);
+}
+
+const UUID = process.argv[2];
+const defaultOrganization = '9bc91a48-f27f-4df3-b1d7-136ce4f7a5dd';
 
 const currentTimeEpoch = Math.floor(Date.now() / 1000)
 const hoursUntilExpiration = 24
@@ -10,9 +20,9 @@ const payload = {
   aud: process.env.AUDIENCE, // aud must be the same as the one in the chat api
   iss: process.env.ISSUER, // iss must be the same as the one in the chat api
   exp: expiryTimeEpoch, // Epoch time must be later than now
-  sub: "88c1d984-69bd-4926-906b-7023c070b434",
-  entityUUID: "88c1d984-69bd-4926-906b-7023c070b434",
-  userUUID: "88c1d984-69bd-4926-906b-7023c070b434",
+  sub: UUID,
+  entityUUID: defaultOrganization,
+  userUUID: UUID,
   levelOnEntity: 999
 }
 
@@ -21,4 +31,4 @@ const token = jwt.sign(
   process.env.JWT_MASTER_SECRET
 );
 
-console.log(token);
+console.log(`\nBearer token:\n${token}`);
