@@ -51,6 +51,12 @@ Su app está lista para funcionar
 
 ## Modo de uso 
 
+## Variables de entorno
+
+Se necesitan dos archivos de variables de entorno en la base del proyecto antes de levantar este. Los archivos `.env` y `.env_db`
+
+En `./docs/example_environment.env` se encuentran ejemplos de estos archivos.
+
 ### Token
 
 Para empezar a usar el sistema, debe ensamblar un token con la siguiente composición
@@ -61,7 +67,7 @@ Este token tiene la siguiente composición
 {
     "aud":"chat.nano-messaging.net",
     "iss":"api.nano-messaging.net",
-    "exp":"999999999999",
+    "exp":"9999999999999",
     "sub":"xxxxxx-xxxxx...."
     "entityUUID":"xxxxxx-xxxxx....",
     "userUUID":"xxxxxx-xxxxx....",
@@ -75,6 +81,8 @@ Este token tiene la siguiente composición
 * `aud`, `iss` y `exp` tienen los significados originales en la especificación JWT (RFC-7519). `sub` podría sustituir a `userUUID` pero no se usa.
 
 Este token debe estar firmado con un secreto conjunto con el servicio original que provee los usuarios de este chat. El servicio de chat asumirá que la información contenida en el token es veraz. Adicionalmente, el servicio de chat no requiere interactuar con el servicio original, solo la info contenida en el token
+
+En la carpeta ./scripts se encuentra el archivo `createJWT.js` que contiene un ejemplo para crear un token válido. Para su uso de necesita usar el mismo `.env` que existe en la base del proyecto, o, específicamente usar el mismo secreto, audience e issuer de jwt.
 
 ### Rooms
 
