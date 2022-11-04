@@ -67,13 +67,13 @@ Este token tiene la siguiente composición
 
 ```json=
 {
-    "aud":"chat.nano-messaging.net",
-    "iss":"api.nano-messaging.net",
-    "exp":"9999999999999",
-    "sub":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-    "entityUUID":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-    "userUUID":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
-    "levelOnEntity":"100"
+  "aud":"chat.nano-messaging.net",
+  "iss":"api.nano-messaging.net",
+  "exp":"9999999999999",
+  "sub":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+  "entityUUID":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "userUUID":"xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+  "levelOnEntity":"100"
 }
 ```
 
@@ -134,8 +134,8 @@ Para comenzar, debe enviar un mensaje con el token especificado anteriormente
 
 ```json=
 {
-    "type":"token",
-    "content":"token.jwt.secreto"
+  "type":"token",
+  "content":"token.jwt.secreto"
 }
 ```
 
@@ -145,8 +145,8 @@ Posteriormente, debe seleccionar un room activo
 
 ```json=
 {
-    "type":"select_room",
-    "room_id":99999
+  "type":"select_room",
+  "room_id":99999
 }
 ```
 
@@ -154,13 +154,23 @@ Al seleccionar un room correcto, recibirá todos los mensajes dirigidos a ese ro
 
 ```json=
 {
-    "type":"message",
-    "content":"Fueled up and ready to go"
+  "type":"message",
+  "content":"Fueled up and ready to go"
 }
 ```
 
 Recibirá el echo de sus propios mensajes.
 Cada mensaje llegará
+
+### Historial de mensajes
+
+Para ver el historial de mensajes entre dos fechas se necesita el id del room a buscar, el token de un usuario con permisos de lectura("r")
+
+`GET /rooms/:id/messages`
+
+`GET /rooms/:id/messages?dateFrom=YYYY-MM-DD&dateTo=YYYY-MM-DD`
+
+Donde tanto `dateFrom` como `dateTo` son opcionales. En caso de no ingresar alguno, o ninguno, su valor default será el día actual.
 
 ### Estructura
 
