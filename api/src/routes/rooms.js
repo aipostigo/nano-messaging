@@ -196,7 +196,7 @@ router.route({
       id: Joi.number(),
     },
     body: {
-      entity_UUID: Joi.string().guid(),
+      userUUID: Joi.string().guid(),
       permissions: Joi.string().max(5),
       level: Joi.number(),
     },
@@ -213,7 +213,7 @@ router.route({
     if (nrules <= 10) {
       const rule = {
         room_id: ctx.request.room.id,
-        entity_UUID: ctx.request.body.entity_UUID,
+        entity_UUID: ctx.request.body.userUUID,
         level: ctx.request.body.level,
         permissions: ctx.request.body.permissions,
       };
@@ -268,12 +268,14 @@ router.route({
       id: Joi.number(),
     },
     query: {
-      dateFrom: Joi.date().iso(),
-      dateTo: Joi.date().iso().max('now').min(Joi.ref('dateFrom')),
+      dateFrom: Joi.date().iso().default(new Date()),
+      dateTo: Joi.date().iso().min(Joi.ref('dateFrom')).default(new Date())
     },
   },
   pre: async (ctx, next) => authorizeRoom(ctx, next, 'r'),
   handler: async (ctx) => {
+    ctx.query.dateFrom = new Date(ctx.query.dateFrom.setHours(0, 0, 0, 0));
+    ctx.query.dateTo = new Date(ctx.query.dateTo.setHours(23, 59, 59, 999));
     ctx.response.json = await ctx.orm.Message.findAll({
       where: {
         room_id: ctx.params.id,

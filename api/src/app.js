@@ -7,6 +7,7 @@ const koajwt = require('koa-jwt');
 const override = require('koa-override-method');
 const helmet = require('koa-helmet');
 const http = require('http');
+const qs = require('qs');
 // const casbin = require('casbin')
 // const authz = require('koa-authz');
 
@@ -26,6 +27,7 @@ const app = websockify(new Koa());
 const developmentMode = app.env === 'development';
 const testMode = app.env === 'test';
 const productionMode = app.env === 'production';
+
 
 if (testMode || productionMode) {
   // Helmet stuff -> Some security initiatives
@@ -57,6 +59,7 @@ app.context.orm = orm;
 
 // expose running mode in ctx.state
 
+
 app.use((ctx, next) => {
   ctx.response.meta = {};
   ctx.response.json = {};
@@ -67,6 +70,7 @@ app.use((ctx, next) => {
 // log requests
 app.use(koaLogger());
 
+
 app.use(koajwt({
   secret: process.env.JWT_MASTER_SECRET,
   key: 'tokendata',
@@ -74,6 +78,7 @@ app.use(koajwt({
   audience: process.env.AUDIENCE,
   issuer: process.env.ISSUER,
 }));
+
 
 // parse request body
 app.use(koaBody({
@@ -89,10 +94,19 @@ app.use(koaBody({
   },
 }));
 
+
+app.use((ctx, next) => {
+  ctx.request.query = qs.parse(ctx.request.querystring);
+  ctx.query = qs.parse(ctx.request.querystring);
+  return next();
+});
+
+
 app.use((ctx, next) => {
   ctx.request.method = override.call(ctx, ctx.request.body.fields || ctx.request.body);
   return next();
 });
+
 
 const messageWrapper = async (ctx, next) => {
   await next();
@@ -111,7 +125,9 @@ const messageWrapper = async (ctx, next) => {
   ctx.response.status = status;
 };
 
+
 app.use(messageWrapper);
+
 
 app.use(async (ctx, next) => {
   try {
@@ -135,6 +151,7 @@ app.use(async (ctx, next) => {
   }
 });
 
+
 // On websockets
 // FFS this don't accept require
 
@@ -144,11 +161,13 @@ const REDIS_SERVER = 'redis://pubsub:6379';
 
 const redisClientCommonPub = redis.createClient(REDIS_SERVER);
 
+
 app.ws.use((ctx, next) => {
   ctx.redisClientCommonPub = redisClientCommonPub;
   ctx.orm = orm;
   return next();
 });
+
 
 async function authorizeMessageToRoom(ctx, message, actualUser) {
   let authorized = false;
@@ -160,7 +179,7 @@ async function authorizeMessageToRoom(ctx, message, actualUser) {
   });
   if (roomPermissions) {
     roomPermissions.forEach((element) => {
-      if (!authorized && element.permissions.indexOf('w') > -1 && element.level >= actualUser.levelOnEntity) {
+      if (!authorized && element.permissions.indexOf('w') > -1) {
         authorized = true;
       }
     });
@@ -170,6 +189,8 @@ async function authorizeMessageToRoom(ctx, message, actualUser) {
   }
   return 0;
 }
+
+
 wsrouter.all('/chat', async (ctx) => {
   const redisClientSub = redis.createClient(REDIS_SERVER);
   let actualUser;
@@ -250,9 +271,12 @@ wsrouter.all('/chat', async (ctx) => {
   });
 });
 
+
 app.ws.use(wsrouter.routes()).use(wsrouter.allowedMethods());
 
+
 const baseRouter = require('./routes');
+
 
 app.use(baseRouter.middleware());
 module.exports = app;
