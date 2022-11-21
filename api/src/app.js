@@ -233,7 +233,7 @@ wsrouter.all('/chat', async (ctx) => {
       if (roomIDTarget === 0) {
         ctx.websocket.send('{"type":"status","data":"NOTAUTHORIZED"');
       } else {
-        ctx.websocket.send('{"type":"status","data":"CONNECTED"');
+        ctx.websocket.send('{"type":"status","data":"CONNECTED"}');
         redisClientSub.unsubscribe('*'); // Test this
         redisClientSub.subscribe(`room-${roomIDTarget}`);
       }
