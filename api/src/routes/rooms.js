@@ -88,6 +88,17 @@ router.route({
   },
 });
 
+// Get all existing rooms
+router.route({
+  method: 'GET',
+  path: '/all',
+handler: async (ctx) => {
+  const salas = await ctx.orm.Room.findAll({});
+  ctx.status = 200;
+  ctx.response.json = salas;
+},
+});
+
 // Creates invitation for a new member.
 router.route({
   method: 'PUT',
